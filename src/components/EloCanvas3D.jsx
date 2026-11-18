@@ -90,7 +90,9 @@ export const EloCanvas3D = forwardRef(({
     sceneRef.current = scene;
 
     // 2. Camera (Perspective with elegant presentation FOV)
-    const camera = new THREE.PerspectiveCamera(38, window.innerWidth / window.innerHeight, 0.1, 100);
+    const initialWidth = container.clientWidth || window.innerWidth;
+    const initialHeight = container.clientHeight || window.innerHeight;
+    const camera = new THREE.PerspectiveCamera(42, initialWidth / initialHeight, 0.1, 100);
     camera.position.set(0.65, 1.15, 3.2);
     camera.userData = { target: new THREE.Vector3(0, 0.75, 0) };
     camera.lookAt(camera.userData.target);
@@ -102,7 +104,7 @@ export const EloCanvas3D = forwardRef(({
       alpha: true,
       powerPreference: 'high-performance'
     });
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(initialWidth, initialHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -501,10 +503,18 @@ export const EloCanvas3D = forwardRef(({
 
     // Mouse handlers for tactile inspection drag
     const onMouseMove = (e) => {
-      const normX = (e.clientX / window.innerWidth) * 2 - 1;
-      const normY = -(e.clientY / window.innerHeight) * 2 + 1;
-      mouseRef.current.targetX = normX;
-      mouseRef.current.targetY = normY;
+      const bounds = container.getBoundingClientRect();
+      const isInsideStage = e.clientX >= bounds.left && e.clientX <= bounds.right &&
+        e.clientY >= bounds.top && e.clientY <= bounds.bottom;
+      if (isInsideStage) {
+        const normX = ((e.clientX - bounds.left) / bounds.width) * 2 - 1;
+        const normY = -((e.clientY - bounds.top) / bounds.height) * 2 + 1;
+        mouseRef.current.targetX = Math.max(-1, Math.min(1, normX));
+        mouseRef.current.targetY = Math.max(-1, Math.min(1, normY));
+      } else {
+        mouseRef.current.targetX = 0;
+        mouseRef.current.targetY = 0;
+      }
 
       if (isDraggingRef.current) {
         const deltaX = e.clientX - previousMousePosRef.current.x;
@@ -516,6 +526,10 @@ export const EloCanvas3D = forwardRef(({
     };
 
     const onMouseDown = (e) => {
+      const bounds = container.getBoundingClientRect();
+      const isInsideStage = e.clientX >= bounds.left && e.clientX <= bounds.right &&
+        e.clientY >= bounds.top && e.clientY <= bounds.bottom;
+      if (!isInsideStage) return;
       isDraggingRef.current = true;
       previousMousePosRef.current = { x: e.clientX, y: e.clientY };
     };
@@ -526,9 +540,11 @@ export const EloCanvas3D = forwardRef(({
 
     const onResize = () => {
       if (!renderer || !camera) return;
-      camera.aspect = window.innerWidth / window.innerHeight;
+      const width = container.clientWidth || window.innerWidth;
+      const height = container.clientHeight || window.innerHeight;
+      camera.aspect = width / height;
       camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setSize(width, height);
     };
 
     window.addEventListener('mousemove', onMouseMove);

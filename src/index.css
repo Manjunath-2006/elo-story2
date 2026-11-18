@@ -27,18 +27,130 @@
   background: #F5B700;
 }
 
-/* Three.js Fixed Background/Foreground Canvas */
+/* Three.js model stage: separate from the slide copy on wide screens. */
 .webgl-canvas-container {
   position: fixed;
   top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  right: 0;
+  left: auto;
+  width: 42vw;
+  max-width: 880px;
+  height: 100dvh;
   z-index: 1;
   pointer-events: none;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 62% 52%, rgba(245, 183, 0, 0.08), transparent 52%);
 }
 .webgl-canvas-container.interactive {
   pointer-events: auto;
+}
+.webgl-canvas-container canvas {
+  display: block;
+}
+.webgl-canvas-container::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(90deg, #08090c 0%, rgba(8, 9, 12, 0.5) 11%, transparent 42%, rgba(8, 9, 12, 0.08) 100%);
+}
+
+.presentation-view-content {
+  width: min(50vw, 56rem);
+  pointer-events: auto;
+}
+
+.presentation-view-shell {
+  pointer-events: none;
+}
+
+.visual-stage-caption {
+  position: fixed;
+  z-index: 15;
+  top: 5.5rem;
+  right: clamp(1.5rem, 4vw, 4rem);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  background: rgba(12, 14, 19, 0.72);
+  color: #c5cad6;
+  font: 600 0.65rem/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  pointer-events: none;
+  backdrop-filter: blur(12px);
+}
+
+.visual-stage-caption__dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: #00f0ff;
+  box-shadow: 0 0 0.75rem rgba(0, 240, 255, 0.75);
+}
+
+.visual-stage-caption__divider {
+  color: #f5b700;
+}
+
+@media (min-width: 1200px) {
+  .presentation-view-shell {
+    justify-content: flex-start;
+  }
+
+  .presentation-view-content {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 1199px) {
+  .webgl-canvas-container {
+    top: 4rem;
+    width: min(46vw, 400px);
+    height: clamp(180px, 30vh, 260px);
+    opacity: 0.94;
+  }
+
+  .webgl-canvas-container::after {
+    background: linear-gradient(180deg, rgba(8, 9, 12, 0.04) 0%, rgba(8, 9, 12, 0.05) 58%, #08090c 100%);
+  }
+
+  .presentation-view-shell {
+    align-items: flex-start;
+    padding-top: calc(4rem + clamp(180px, 30vh, 260px) + 1.5rem);
+  }
+
+  .presentation-view-content {
+    width: 100%;
+    min-height: 0;
+  }
+
+  .visual-stage-caption {
+    top: 4.75rem;
+    right: 1.25rem;
+    font-size: 0.58rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .webgl-canvas-container {
+    width: min(52vw, 300px);
+    height: 190px;
+  }
+
+  .presentation-view-shell {
+    padding-top: calc(4rem + 190px + 1.25rem);
+  }
+
+  .visual-stage-caption {
+    top: 4.45rem;
+    right: 0.75rem;
+    padding: 0.45rem 0.6rem;
+  }
 }
 
 /* Luxury Editorial Typography */

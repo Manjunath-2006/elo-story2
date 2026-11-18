@@ -122,11 +122,10 @@ export default function App() {
       onTouchEnd={handleTouchEnd}
       className="relative min-h-screen text-[#F5F3ED] bg-[#08090C] overflow-hidden select-none"
     >
-      {/* 1. Subtle Vignette & Film Atmosphere */}
+      {/* 1. Subtle Film Atmosphere */}
       <div className="fixed inset-0 pointer-events-none film-grain z-10 opacity-70" />
-      <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-[#08090C]/40 to-[#08090C] z-10" />
 
-      {/* 2. Three.js Procedural 3D ELO Robot Model Canvas */}
+      {/* 2. Dedicated 3D visual column */}
       <EloCanvas3D
         ref={eloCanvasRef}
         currentSlideIndex={currentSlideIndex}
@@ -134,6 +133,10 @@ export default function App() {
         selectedHotspot={selectedHotspot}
         isRobotPaused={isRobotPaused}
       />
+      <div className="visual-stage-caption" aria-hidden="true">
+        <span className="visual-stage-caption__dot" />
+        ELO <span className="visual-stage-caption__divider">/</span> Prototype view
+      </div>
 
       {/* 3. Minimalist Presentation HUD */}
       <PresentationHUD

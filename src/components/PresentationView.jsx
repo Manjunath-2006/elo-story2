@@ -18,9 +18,9 @@ export const PresentationView = ({
   const [showSourcesModal, setShowSourcesModal] = useState(false);
 
   return (
-    <div className="relative z-20 min-h-screen flex items-center justify-center p-6 sm:p-12 md:p-16 lg:p-20 overflow-hidden">
-      {/* Container constrained to 16:9 / clean presentation canvas */}
-      <div className="w-full max-w-7xl mx-auto flex flex-col justify-center min-h-[75vh]">
+    <div className="presentation-view-shell relative z-20 min-h-screen flex items-center justify-start p-6 sm:p-12 md:p-16 lg:p-20 overflow-hidden">
+      {/* Copy stays in its own column while the 3D model anchors the right side. */}
+      <div className="presentation-view-content w-full max-w-7xl mx-auto flex flex-col justify-center min-h-[75vh]">
 
         {/* ======================================================== */}
         {/* SLIDE 01: PRODUCT HERO */}
@@ -476,7 +476,7 @@ export const PresentationView = ({
 
             {/* Right Clean Phone Silhouette */}
             <div className="lg:col-span-5 flex justify-center">
-              <div className="w-72 rounded-[36px] p-3 bg-[#161820] border-2 border-white/20 shadow-2xl space-y-4">
+              <div className="w-full max-w-72 rounded-[36px] p-3 bg-[#161820] border-2 border-white/20 shadow-2xl space-y-4">
                 {/* Phone Header */}
                 <div className="flex items-center justify-between text-[10px] font-mono text-[#8E95A5] px-2 pt-1 border-b border-white/10 pb-2">
                   <span className="font-bold text-white">ELO PARENT</span>
@@ -615,7 +615,7 @@ export const PresentationView = ({
 
       {/* Sources Modal */}
       {showSourcesModal && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-6">
+        <div className="fixed inset-0 z-50 pointer-events-auto bg-black/80 backdrop-blur-md flex items-center justify-center p-6">
           <div className="w-full max-w-2xl bg-[#12141A] border border-white/20 rounded-2xl p-6 space-y-4 max-h-[80vh] overflow-y-auto">
             <div className="flex justify-between items-center border-b border-white/10 pb-3">
               <h3 className="font-bold text-white font-editorial text-lg">Verified Primary Sources</h3>
